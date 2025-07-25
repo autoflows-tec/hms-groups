@@ -1,7 +1,10 @@
 import { RefreshCw, Circle, Moon, Sun } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import E3Logo from "./E3Logo";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { ConfigurationMenu, ConfigurationType } from "./ConfigurationMenu";
+import { ConfigurationDialog } from "./ConfigurationDialog";
 
 interface StatusSummary {
   estavel: number;
@@ -17,6 +20,13 @@ interface GroupsHeaderProps {
 
 export const GroupsHeader = ({ statusSummary, loading, onRefresh }: GroupsHeaderProps) => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [configDialogOpen, setConfigDialogOpen] = useState(false);
+  const [configType, setConfigType] = useState<ConfigurationType | null>(null);
+
+  const handleConfigurationSelect = (type: ConfigurationType) => {
+    setConfigType(type);
+    setConfigDialogOpen(true);
+  };
 
   return (
     <div className="bg-white dark:bg-e3-dark-bg border-b border-gray-200 dark:border-gray-700 shadow-sm">
@@ -51,6 +61,9 @@ export const GroupsHeader = ({ statusSummary, loading, onRefresh }: GroupsHeader
               </div>
             </div>
             
+            {/* Configuration Menu */}
+            <ConfigurationMenu onConfigurationSelect={handleConfigurationSelect} />
+            
             {/* Dark Mode Toggle */}
             <Button
               onClick={toggleDarkMode}
@@ -72,6 +85,12 @@ export const GroupsHeader = ({ statusSummary, loading, onRefresh }: GroupsHeader
           </div>
         </div>
       </div>
+      
+      <ConfigurationDialog
+        open={configDialogOpen}
+        onOpenChange={setConfigDialogOpen}
+        type={configType}
+      />
     </div>
   );
 };

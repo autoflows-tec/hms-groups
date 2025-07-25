@@ -9,11 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate, isMessageFromToday, getStatusType } from "@/utils/groupUtils";
+import { EditableSelectCell } from "./EditableSelectCell";
+import { useSquads } from "@/hooks/useSquads";
+import { useHeads } from "@/hooks/useHeads";
+import { useGestores } from "@/hooks/useGestores";
 
 type Group = Database['public']['Tables']['Lista_de_Grupos']['Row'];
 
 interface GroupsTableProps {
   groups: Group[];
+  onUpdateGroup: (groupId: number, field: 'squad' | 'head' | 'gestor', value: string | null) => Promise<void>;
 }
 
 const getStatusIndicator = (status: string | null, resumo: string | null) => {
@@ -31,13 +36,22 @@ const getStatusIndicator = (status: string | null, resumo: string | null) => {
   }
 };
 
-export const GroupsTable = ({ groups }: GroupsTableProps) => {
+export const GroupsTable = ({ groups, onUpdateGroup }: GroupsTableProps) => {
+  // Carregar dados de configuração
+  const { squads, loading: squadsLoading } = useSquads();
+  const { heads, loading: headsLoading } = useHeads();
+  const { gestores, loading: gestoresLoading } = useGestores();
+
+  const isConfigLoading = squadsLoading || headsLoading || gestoresLoading;
   return (
     <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow className="border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-e3-dark-card/50">
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Nome do Grupo</TableHead>
+            <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Squad</TableHead>
+            <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Head</TableHead>
+            <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Gestor</TableHead>
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Data de Última Atualização</TableHead>
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Status do Grupo</TableHead>
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Situação</TableHead>
@@ -53,6 +67,33 @@ export const GroupsTable = ({ groups }: GroupsTableProps) => {
               <TableRow key={group.id} className="border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-e3-dark-card/50">
                 <TableCell className="text-e3-dark dark:text-white font-inter font-medium">
                   {group.nome_grupo || group.grupo}
+                </TableCell>
+                <TableCell className="p-2">
+                  <EditableSelectCell
+                    value={group.squad}
+                    options={squads}
+                    onUpdate={(value) => onUpdateGroup(group.id, 'squad', value)}
+                    placeholder="Selecionar squad..."
+                    loading={isConfigLoading}
+                  />
+                </TableCell>
+                <TableCell className="p-2">
+                  <EditableSelectCell
+                    value={group.head}
+                    options={heads}
+                    onUpdate={(value) => onUpdateGroup(group.id, 'head', value)}
+                    placeholder="Selecionar head..."
+                    loading={isConfigLoading}
+                  />
+                </TableCell>
+                <TableCell className="p-2">
+                  <EditableSelectCell
+                    value={group.gestor}
+                    options={gestores}
+                    onUpdate={(value) => onUpdateGroup(group.id, 'gestor', value)}
+                    placeholder="Selecionar gestor..."
+                    loading={isConfigLoading}
+                  />
                 </TableCell>
                 <TableCell className="text-e3-gray dark:text-gray-300 font-inter">
                   {formatDate(group.ultima_atualizacao)}

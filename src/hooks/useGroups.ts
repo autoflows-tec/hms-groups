@@ -4,6 +4,8 @@ import { Database } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 
 type Group = Database['public']['Tables']['Lista_de_Grupos']['Row'];
+type GroupInsert = Database['public']['Tables']['Lista_de_Grupos']['Insert'];
+type GroupUpdate = Database['public']['Tables']['Lista_de_Grupos']['Update'];
 
 export const useGroups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -68,6 +70,7 @@ export const useGroups = () => {
     return () => {
       supabase.removeChannel(channel);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRefresh = () => {
@@ -78,11 +81,214 @@ export const useGroups = () => {
     });
   };
 
+  const updateGroupField = async (
+    groupId: number, 
+    field: 'squad' | 'head' | 'gestor', 
+    value: string | null
+  ) => {
+    try {
+      // Update otimista na UI
+      setGroups(prevGroups => 
+        prevGroups.map(group => 
+          group.id === groupId 
+            ? { ...group, [field]: value }
+            : group
+        )
+      );
+
+      // Update no banco de dados
+      const { error: updateError } = await supabase
+        .from('Lista_de_Grupos')
+        .update({ [field]: value })
+        .eq('id', groupId);
+
+      if (updateError) {
+        // Reverter update otimista em caso de erro
+        setGroups(prevGroups => 
+          prevGroups.map(group => 
+            group.id === groupId 
+              ? { ...group, [field]: groups.find(g => g.id === groupId)?.[field] || null }
+              : group
+          )
+        );
+        throw updateError;
+      }
+
+      // Feedback de sucesso
+      const fieldNames = {
+        squad: 'Squad',
+        head: 'Head',
+        gestor: 'Gestor'
+      };
+
+      toast({
+        title: "Atualizado com sucesso!",
+        description: `${fieldNames[field]} do grupo foi atualizado.`,
+      });
+
+    } catch (err) {
+      console.error(`Erro ao atualizar ${field}:`, err);
+      toast({
+        title: "Erro ao atualizar",
+        description: `Não foi possível atualizar o ${field}. Tente novamente.`,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  const createGroup = async (groupData: GroupInsert) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      console.log('🔄 Criando grupo:', groupData);
+
+      const { data, error: insertError } = await supabase
+        .from('Lista_de_Grupos')
+        .insert(groupData)
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('❌ Erro ao criar grupo:', insertError);
+        throw insertError;
+      }
+
+      console.log('✅ Grupo criado:', data);
+      
+      // Atualizar lista de grupos
+      setGroups(prevGroups => [data, ...prevGroups]);
+
+      toast({
+        title: "Grupo criado!",
+        description: `O grupo "${groupData.nome}" foi adicionado com sucesso.`,
+      });
+
+      return data;
+    } catch (err) {
+      console.error('💥 Erro ao criar grupo:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(`Erro ao criar grupo: ${errorMessage}`);
+      
+      toast({
+        title: "Erro ao criar grupo",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateGroup = async (groupId: number, updates: GroupUpdate) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      console.log('🔄 Atualizando grupo:', groupId, updates);
+
+      const { data, error: updateError } = await supabase
+        .from('Lista_de_Grupos')
+        .update(updates)
+        .eq('id', groupId)
+        .select()
+        .single();
+
+      if (updateError) {
+        console.error('❌ Erro ao atualizar grupo:', updateError);
+        throw updateError;
+      }
+
+      console.log('✅ Grupo atualizado:', data);
+      
+      // Atualizar lista de grupos
+      setGroups(prevGroups => 
+        prevGroups.map(group => 
+          group.id === groupId ? data : group
+        )
+      );
+
+      toast({
+        title: "Grupo atualizado!",
+        description: `O grupo foi atualizado com sucesso.`,
+      });
+
+      return data;
+    } catch (err) {
+      console.error('💥 Erro ao atualizar grupo:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(`Erro ao atualizar grupo: ${errorMessage}`);
+      
+      toast({
+        title: "Erro ao atualizar grupo",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteGroup = async (groupId: number) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      console.log('🔄 Deletando grupo:', groupId);
+
+      const { error: deleteError } = await supabase
+        .from('Lista_de_Grupos')
+        .delete()
+        .eq('id', groupId);
+
+      if (deleteError) {
+        console.error('❌ Erro ao deletar grupo:', deleteError);
+        throw deleteError;
+      }
+
+      console.log('✅ Grupo deletado:', groupId);
+      
+      // Remover da lista de grupos
+      setGroups(prevGroups => 
+        prevGroups.filter(group => group.id !== groupId)
+      );
+
+      toast({
+        title: "Grupo removido!",
+        description: `O grupo foi removido com sucesso.`,
+      });
+
+    } catch (err) {
+      console.error('💥 Erro ao deletar grupo:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(`Erro ao deletar grupo: ${errorMessage}`);
+      
+      toast({
+        title: "Erro ao remover grupo",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     groups,
     loading,
     error,
     fetchGroups,
-    handleRefresh
+    handleRefresh,
+    updateGroupField,
+    createGroup,
+    updateGroup,
+    deleteGroup
   };
 };

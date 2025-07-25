@@ -14,30 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      Gestores: {
+        Row: {
+          ativo: boolean
+          created_at: string | null
+          id: number
+          nome: string
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string | null
+          id?: number
+          nome: string
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string | null
+          id?: number
+          nome?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      Heads: {
+        Row: {
+          ativo: boolean
+          created_at: string | null
+          id: number
+          nome: string
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string | null
+          id?: number
+          nome: string
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string | null
+          id?: number
+          nome?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       Lista_de_Grupos: {
         Row: {
+          gestor: string | null
           grupo: string
+          head: string | null
           id: number
           nome_grupo: string | null
           resumo: string | null
+          squad: string | null
           status: string | null
           timestamp: string | null
           ultima_atualizacao: string | null
         }
         Insert: {
+          gestor?: string | null
           grupo: string
+          head?: string | null
           id?: number
           nome_grupo?: string | null
           resumo?: string | null
+          squad?: string | null
           status?: string | null
           timestamp?: string | null
           ultima_atualizacao?: string | null
         }
         Update: {
+          gestor?: string | null
           grupo?: string
+          head?: string | null
           id?: number
           nome_grupo?: string | null
           resumo?: string | null
+          squad?: string | null
           status?: string | null
           timestamp?: string | null
           ultima_atualizacao?: string | null
@@ -68,6 +125,30 @@ export type Database = {
           nome?: string | null
           remoteJid?: string | null
           timestamp?: string | null
+        }
+        Relationships: []
+      }
+      Squads: {
+        Row: {
+          ativo: boolean
+          created_at: string | null
+          id: number
+          nome: string
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string | null
+          id?: number
+          nome: string
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string | null
+          id?: number
+          nome?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

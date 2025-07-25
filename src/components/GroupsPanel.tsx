@@ -15,7 +15,7 @@ import { GroupsPagination } from "./GroupsPagination";
 type Group = Database['public']['Tables']['Lista_de_Grupos']['Row'];
 
 const GroupsPanel = () => {
-  const { groups, loading, error, handleRefresh } = useGroups();
+  const { groups, loading, error, handleRefresh, updateGroupField } = useGroups();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -150,7 +150,7 @@ const GroupsPanel = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <GroupsTable groups={currentGroups} />
+                    <GroupsTable groups={currentGroups} onUpdateGroup={updateGroupField} />
                     <GroupsPagination
                       currentPage={currentPage}
                       totalPages={totalPages}
