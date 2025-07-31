@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Database } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
+import { clearStatusWhenNoMessages } from "@/utils/groupUtils";
 
 type Group = Database['public']['Tables']['Lista_de_Grupos']['Row'];
 type GroupInsert = Database['public']['Tables']['Lista_de_Grupos']['Insert'];
@@ -280,6 +281,38 @@ export const useGroups = () => {
     }
   };
 
+  const clearGroupStatus = async (groupId: number) => {
+    try {
+      const success = await clearStatusWhenNoMessages(groupId);
+      
+      if (success) {
+        // Atualizar estado local otimisticamente
+        setGroups(prevGroups => 
+          prevGroups.map(group => 
+            group.id === groupId 
+              ? { ...group, status: null, resumo: 'Sem mensagens no grupo' }
+              : group
+          )
+        );
+
+        toast({
+          title: "Status removido",
+          description: "O status do grupo foi removido (sem mensagens).",
+        });
+      }
+      
+      return success;
+    } catch (err) {
+      console.error('Erro ao limpar status:', err);
+      toast({
+        title: "Erro ao remover status",
+        description: "Não foi possível remover o status do grupo.",
+        variant: "destructive",
+      });
+      return false;
+    }
+  };
+
   return {
     groups,
     loading,
@@ -289,6 +322,7 @@ export const useGroups = () => {
     updateGroupField,
     createGroup,
     updateGroup,
-    deleteGroup
+    deleteGroup,
+    clearGroupStatus
   };
 };

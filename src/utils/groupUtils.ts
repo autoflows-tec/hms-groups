@@ -37,6 +37,12 @@ export const getStatusType = (status: string | null, resumo: string | null) => {
   const statusLower = (status || '').toLowerCase();
   const resumoLower = (resumo || '').toLowerCase();
   
+  // Verificar se é "sem mensagens" explicitamente
+  if (statusLower.includes('sem mensagens') || statusLower.includes('sem mensagem') ||
+      resumoLower.includes('sem mensagens') || resumoLower.includes('sem mensagem')) {
+    return 'sem-mensagens';
+  }
+  
   // Verificar se é crítico
   if (statusLower.includes('crítico') || statusLower.includes('critico') || 
       resumoLower.includes('crítico') || resumoLower.includes('critico')) {
@@ -58,4 +64,29 @@ export const getStatusType = (status: string | null, resumo: string | null) => {
   }
   
   return 'sem-categoria';
+};
+
+export const clearStatusWhenNoMessages = async (groupId: number) => {
+  const { supabase } = await import('@/integrations/supabase/client');
+  
+  try {
+    const { error } = await supabase
+      .from('Lista_de_Grupos')
+      .update({ 
+        status: null,
+        resumo: 'Sem mensagens no grupo'
+      })
+      .eq('id', groupId);
+
+    if (error) {
+      console.error('Erro ao limpar status:', error);
+      throw error;
+    }
+    
+    console.log(`Status removido para o grupo ${groupId} (sem mensagens)`);
+    return true;
+  } catch (error) {
+    console.error('Erro ao atualizar status do grupo:', error);
+    return false;
+  }
 };

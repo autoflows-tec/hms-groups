@@ -1,4 +1,4 @@
-import { Circle } from "lucide-react";
+import { Circle, X } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import {
   Table,
@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { formatDate, isMessageFromToday, getStatusType } from "@/utils/groupUtils";
 import { EditableSelectCell } from "./EditableSelectCell";
 import { useSquads } from "@/hooks/useSquads";
@@ -19,6 +20,7 @@ type Group = Database['public']['Tables']['Lista_de_Grupos']['Row'];
 interface GroupsTableProps {
   groups: Group[];
   onUpdateGroup: (groupId: number, field: 'squad' | 'head' | 'gestor', value: string | null) => Promise<void>;
+  onClearStatus?: (groupId: number) => Promise<void>;
 }
 
 const getStatusIndicator = (status: string | null, resumo: string | null) => {
@@ -36,7 +38,7 @@ const getStatusIndicator = (status: string | null, resumo: string | null) => {
   }
 };
 
-export const GroupsTable = ({ groups, onUpdateGroup }: GroupsTableProps) => {
+export const GroupsTable = ({ groups, onUpdateGroup, onClearStatus }: GroupsTableProps) => {
   // Carregar dados de configuração
   const { squads, loading: squadsLoading } = useSquads();
   const { heads, loading: headsLoading } = useHeads();
@@ -55,7 +57,7 @@ export const GroupsTable = ({ groups, onUpdateGroup }: GroupsTableProps) => {
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Data de Última Atualização</TableHead>
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Status do Grupo</TableHead>
             <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold">Situação</TableHead>
-            <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold text-center w-16">Status</TableHead>
+            <TableHead className="text-e3-dark dark:text-white font-poppins font-semibold text-center w-24">Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -117,7 +119,20 @@ export const GroupsTable = ({ groups, onUpdateGroup }: GroupsTableProps) => {
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
-                  {getStatusIndicator(group.status, group.resumo)}
+                  <div className="flex items-center justify-center gap-2">
+                    {getStatusIndicator(group.status, group.resumo)}
+                    {(group.status || group.resumo) && onClearStatus && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onClearStatus(group.id)}
+                        className="h-6 w-6 p-0 hover:bg-red-100 dark:hover:bg-red-900/20"
+                        title="Remover status (sem mensagens)"
+                      >
+                        <X className="h-3 w-3 text-red-500" />
+                      </Button>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
             );

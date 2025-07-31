@@ -13,17 +13,30 @@ import { GroupsTable } from "./GroupsTable";
 import { GroupsPagination } from "./GroupsPagination";
 
 type Group = Database['public']['Tables']['Lista_de_Grupos']['Row'];
+type StatusFilter = 'todos' | 'estavel' | 'alerta' | 'critico' | 'sem-mensagens';
 
 const GroupsPanel = () => {
-  const { groups, loading, error, handleRefresh, updateGroupField } = useGroups();
+  const { groups, loading, error, handleRefresh, updateGroupField, clearGroupStatus } = useGroups();
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("todos");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Filtrar grupos baseado na busca
-  const filteredGroups = groups.filter(group =>
-    (group.nome_grupo || group.grupo || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtrar grupos baseado na busca e status
+  const filteredGroups = groups.filter(group => {
+    // Filtro por nome
+    const matchesSearch = (group.nome_grupo || group.grupo || '').toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Filtro por status
+    if (statusFilter === 'todos') {
+      return matchesSearch;
+    }
+    
+    const groupStatusType = getStatusType(group.status, group.resumo);
+    const matchesStatus = groupStatusType === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
 
   // Calcular paginação
   const totalPages = Math.ceil(filteredGroups.length / itemsPerPage);
@@ -31,10 +44,10 @@ const GroupsPanel = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentGroups = filteredGroups.slice(startIndex, endIndex);
 
-  // Reset da página quando busca muda
+  // Reset da página quando busca ou filtro de status mudam
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, statusFilter]);
 
   const getStatusSummary = () => {
     let estavel = 0, alerta = 0, critico = 0;
@@ -117,11 +130,17 @@ const GroupsPanel = () => {
           <>
             <GroupsSearch
               searchTerm={searchTerm}
+              statusFilter={statusFilter}
               onSearchChange={setSearchTerm}
+              onStatusFilterChange={setStatusFilter}
               totalGroups={filteredGroups.length}
             />
 
-            <GroupsStatusSummary statusSummary={statusSummary} />
+            <GroupsStatusSummary 
+              statusSummary={statusSummary} 
+              activeFilter={statusFilter}
+              onFilterChange={setStatusFilter}
+            />
 
             {filteredGroups.length === 0 ? (
               <div className="text-center py-12">
@@ -150,7 +169,11 @@ const GroupsPanel = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <GroupsTable groups={currentGroups} onUpdateGroup={updateGroupField} />
+                    <GroupsTable 
+              groups={currentGroups} 
+              onUpdateGroup={updateGroupField}
+              onClearStatus={clearGroupStatus}
+            />
                     <GroupsPagination
                       currentPage={currentPage}
                       totalPages={totalPages}
