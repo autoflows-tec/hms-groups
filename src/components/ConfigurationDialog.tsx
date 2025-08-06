@@ -599,7 +599,7 @@ export const ConfigurationDialog = ({ open, onOpenChange, type }: ConfigurationD
             <Button
               onClick={() => setIsAdding(true)}
               disabled={hook.loading || editingId !== null}
-              className="w-full bg-e3-orange hover:bg-e3-orange/90 text-white border-0 rounded-md shadow-sm font-inter font-medium"
+              className="w-full bg-e3-primary hover:bg-e3-primary/90 text-white border-0 rounded-md shadow-sm font-inter font-medium"
             >
               <Plus className="h-4 w-4 mr-2" />
               {type === 'groups' ? 'Adicionar Grupo' : 'Adicionar Novo'}

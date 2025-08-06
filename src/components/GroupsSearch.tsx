@@ -56,14 +56,14 @@ export const GroupsSearch = ({ searchTerm, statusFilter, onSearchChange, onStatu
               placeholder="Buscar grupos por nome..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 border-gray-300 dark:border-gray-600 bg-white dark:bg-e3-dark-card text-e3-dark dark:text-white placeholder:text-e3-gray dark:placeholder:text-gray-400 focus:border-e3-orange focus:ring-e3-orange font-inter"
+              className="pl-10 border-gray-300 dark:border-gray-600 bg-white dark:bg-e3-dark-card text-e3-dark dark:text-white placeholder:text-e3-gray dark:placeholder:text-gray-400 focus:border-e3-primary focus:ring-e3-primary font-inter"
             />
           </div>
 
           {/* Filtro por status */}
           <div className="lg:w-48">
             <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-              <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-e3-dark-card text-e3-dark dark:text-white focus:border-e3-orange focus:ring-e3-orange font-inter">
+              <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-e3-dark-card text-e3-dark dark:text-white focus:border-e3-primary focus:ring-e3-primary font-inter">
                 <div className="flex items-center gap-2">
                   {getStatusIcon(statusFilter)}
                   <SelectValue />

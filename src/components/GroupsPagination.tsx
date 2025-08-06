@@ -70,7 +70,7 @@ export const GroupsPagination = ({
           size="sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="border-gray-300 dark:border-gray-600 text-e3-dark dark:text-white hover:bg-e3-orange hover:text-white hover:border-e3-orange font-inter"
+          className="border-gray-300 dark:border-gray-600 text-e3-dark dark:text-white hover:bg-e3-primary hover:text-white hover:border-e3-primary font-inter"
         >
           <ChevronLeft className="h-4 w-4" />
           <span className="hidden sm:inline ml-1">Anterior</span>
@@ -91,8 +91,8 @@ export const GroupsPagination = ({
                 className={`
                   min-w-[2.5rem] h-9
                   ${currentPage === page 
-                    ? "bg-e3-orange text-white hover:bg-e3-orange/90 border-e3-orange" 
-                    : "border-gray-300 dark:border-gray-600 text-e3-dark dark:text-white hover:bg-e3-orange hover:text-white hover:border-e3-orange"
+                    ? "bg-e3-primary text-white hover:bg-e3-primary/90 border-e3-primary" 
+                    : "border-gray-300 dark:border-gray-600 text-e3-dark dark:text-white hover:bg-e3-primary hover:text-white hover:border-e3-primary"
                   }
                   font-inter
                 `}
@@ -108,7 +108,7 @@ export const GroupsPagination = ({
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="border-gray-300 dark:border-gray-600 text-e3-dark dark:text-white hover:bg-e3-orange hover:text-white hover:border-e3-orange font-inter"
+          className="border-gray-300 dark:border-gray-600 text-e3-dark dark:text-white hover:bg-e3-primary hover:text-white hover:border-e3-primary font-inter"
         >
           <span className="hidden sm:inline mr-1">Próxima</span>
           <ChevronRight className="h-4 w-4" />

@@ -76,7 +76,7 @@ export const GroupsHeader = ({ statusSummary, loading, onRefresh }: GroupsHeader
             
             <Button
               onClick={onRefresh}
-              className="bg-e3-orange hover:bg-e3-orange/90 text-white border-0 rounded-md shadow-sm font-inter font-medium"
+              className="bg-e3-primary hover:bg-e3-primary/90 text-white border-0 rounded-md shadow-sm font-inter font-medium"
               disabled={loading}
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />

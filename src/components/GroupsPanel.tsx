@@ -79,7 +79,7 @@ const GroupsPanel = () => {
           <div className="text-center space-y-4">
             <E3Logo className="h-16 w-auto mx-auto animate-pulse" />
             <div className="flex items-center space-x-2 text-e3-dark dark:text-white">
-              <Loader2 className="h-5 w-5 animate-spin text-e3-orange" />
+              <Loader2 className="h-5 w-5 animate-spin text-e3-primary" />
               <span className="font-inter font-medium">Carregando grupos...</span>
             </div>
           </div>
@@ -100,7 +100,7 @@ const GroupsPanel = () => {
       <div className="container mx-auto px-4 py-8">
         {error ? (
           <div className="text-center py-12">
-            <div className="bg-white dark:bg-e3-dark-card rounded-lg border-2 border-e3-orange p-8 max-w-md mx-auto shadow-sm">
+            <div className="bg-white dark:bg-e3-dark-card rounded-lg border-2 border-e3-primary p-8 max-w-md mx-auto shadow-sm">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-xl font-poppins font-semibold text-e3-dark dark:text-white mb-2">
                 Erro ao carregar dados
@@ -108,7 +108,7 @@ const GroupsPanel = () => {
               <p className="text-e3-gray dark:text-gray-300 font-inter mb-4">{error}</p>
               <Button
                 onClick={handleRefresh}
-                className="bg-e3-orange hover:bg-e3-orange/90 text-white font-inter font-medium"
+                className="bg-e3-primary hover:bg-e3-primary/90 text-white font-inter font-medium"
               >
                 Tentar novamente
               </Button>
@@ -158,7 +158,7 @@ const GroupsPanel = () => {
               <>
                 {/* Groups Table */}
                 <Card className="bg-white dark:bg-e3-dark-card border-2 border-gray-200 dark:border-gray-600 shadow-sm">
-                  <CardHeader className="border-b-2 border-e3-orange">
+                  <CardHeader className="border-b-2 border-e3-primary">
                     <CardTitle className="text-e3-dark dark:text-white font-poppins">
                       Lista de Grupos
                       {searchTerm && (
