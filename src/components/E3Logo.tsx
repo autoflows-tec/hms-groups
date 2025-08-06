@@ -7,7 +7,7 @@ const E3Logo = ({ className = "h-8 w-8" }: E3LogoProps) => {
     <div className={`${className} relative`}>
       <img 
         src="/e3-logo.png" 
-        alt="E3 Digital" 
+        alt="HMS Tráfego e Performance" 
         className="w-full h-full object-contain"
       />
     </div>

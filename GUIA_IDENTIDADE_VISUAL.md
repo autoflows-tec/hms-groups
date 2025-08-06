@@ -1,6 +1,6 @@
-# Guia de Alteração da Identidade Visual - Autoflows Grupos E3Digital
+# Guia de Alteração da Identidade Visual - HMS Tráfego e Performance
 
-Este documento fornece um passo a passo completo para alterar a identidade visual do sistema de gerenciamento de grupos da E3Digital.
+Este documento fornece um passo a passo completo para alterar a identidade visual do sistema de gerenciamento de grupos da HMS Tráfego e Performance.
 
 ## 📁 Estrutura de Arquivos da Identidade Visual
 
@@ -16,13 +16,13 @@ Este documento fornece um passo a passo completo para alterar a identidade visua
 - Componentes UI em `src/components/ui/` - Botões, cards, etc.
 
 ### Assets (Imagens e Logos)
-- `public/e3-logo.png` - Logo principal da E3Digital
+- `public/e3-logo.png` - Logo principal da HMS Tráfego e Performance
 - `public/favicon.ico` - Favicon do site
 - `public/placeholder.svg` - Imagem placeholder
 
 ## 🎨 Sistema de Cores Atual
 
-### Cores Primárias da E3Digital (definidas em `src/index.css:46-51`)
+### Cores Primárias da HMS Tráfego e Performance (definidas em `src/index.css:46-51`)
 ```css
 --e3-orange: #FD6000;      /* Laranja principal da marca */
 --e3-light-gray: #D9D9D9;  /* Cinza claro */
@@ -147,7 +147,7 @@ Atualize as variáveis CSS dentro da classe `.dark` para refletir suas cores no 
 Os botões já usam as classes `bg-e3-orange` e `hover:bg-e3-orange/90`, então as alterações de cor se aplicarão automaticamente.
 
 #### 6.2 Cards e componentes
-Procure por classes que usam as cores da E3Digital em:
+Procure por classes que usam as cores da HMS Tráfego e Performance em:
 - `src/components/GroupsTable.tsx`
 - `src/components/GroupsStatusSummary.tsx`
 - Outros componentes na pasta `src/components/`

@@ -1,6 +1,6 @@
-# E3 Digital - Painel de Grupos de Clientes
+# HMS Tráfego e Performance - Painel de Grupos de Clientes
 
-Sistema de monitoramento e gerenciamento de grupos de WhatsApp para clientes da E3 Digital.
+Sistema de monitoramento e gerenciamento de grupos de WhatsApp para clientes da HMS Tráfego e Performance.
 
 ## 📋 Visão Geral
 
@@ -89,7 +89,7 @@ Todas com estrutura:
 - ✅ Animações e transições suaves
 - ✅ Feedback visual consistente
 - ✅ Error handling robusto
-- ✅ Tema corporativo E3 Digital
+- ✅ Tema corporativo HMS Tráfego e Performance
 
 ## 📁 Estrutura de Arquivos Principais
 
@@ -211,7 +211,7 @@ npm run build
 
 ## 👥 Equipe
 
-Desenvolvido para **E3 Digital** com foco em monitoramento eficiente de grupos de clientes WhatsApp.
+Desenvolvido para **HMS Tráfego e Performance** com foco em monitoramento eficiente de grupos de clientes WhatsApp.
 
 ---
 

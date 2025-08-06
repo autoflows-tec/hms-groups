@@ -35,8 +35,8 @@ export const GroupsHeader = ({ statusSummary, loading, onRefresh }: GroupsHeader
           <div className="flex items-center space-x-4">
             <E3Logo className="h-16 w-auto" />
             <div>
-              <h1 className="text-3xl font-poppins font-semibold text-e3-dark dark:text-white">
-                E3 DIGITAL
+              <h1 className="text-2xl font-poppins font-semibold text-e3-dark dark:text-white">
+                HMS Tráfego e Performance
               </h1>
               <p className="text-e3-gray dark:text-gray-300 font-inter font-medium">
                 Painel de Grupos de Clientes
